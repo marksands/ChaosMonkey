@@ -8,6 +8,22 @@
 
 @implementation TFFChaosMonkeyURLMapperTests
 
+- (void)testWhenMappingURLThatAlwaysInjectsErrorThenRespondsToRequestIsAlways {
+    NSURL *url = [NSURL URLWithString:@"https://random.com/Always"];
+    NSError *error = [NSError errorWithDomain:@"Domain" code:1 userInfo:nil];
+    
+    [[TFFChaosMonkeyURLMapper sharedInstance] mapURL:url withError:error priority:TFFChaosMonkeyPriorityAlways];
+    
+    int responses = 0;
+    for (int i = 0; i < 100; ++i) {
+        if ([[TFFChaosMonkeyURLMapper sharedInstance] respondToRequestRespectingPriority:[NSURLRequest requestWithURL:url]]) {
+            responses++;
+        }
+    }
+    
+    XCTAssertEqual(responses, 100);
+}
+
 - (void)testWhenMappingURLWithHighPriorityThenRespondsToRequestIsTrueMostOfTheTime {
     NSURL *url = [NSURL URLWithString:@"https://random.com/High"];
     NSError *error = [NSError errorWithDomain:@"Domain" code:1 userInfo:nil];
@@ -21,39 +37,7 @@
         }
     }
     
-    XCTAssertEqualWithAccuracy(responses, 75, EPSILON);
-}
-
-- (void)testWhenMappingURLWithMediumPriorityThenRespondsToRequestIsTrueSomeOfTheTime {
-    NSURL *url = [NSURL URLWithString:@"https://random.com/Medium"];
-    NSError *error = [NSError errorWithDomain:@"Domain" code:1 userInfo:nil];
-    
-    [[TFFChaosMonkeyURLMapper sharedInstance] mapURL:url withError:error priority:TFFChaosMonkeyPriorityMedium];
-    
-    int responses = 0;
-    for (int i = 0; i < 100; ++i) {
-        if ([[TFFChaosMonkeyURLMapper sharedInstance] respondToRequestRespectingPriority:[NSURLRequest requestWithURL:url]]) {
-            responses++;
-        }
-    }
-    
-    XCTAssertEqualWithAccuracy(responses, 50, EPSILON);
-}
-
-- (void)testWhenMappingURLWithLowPriorityThenRespondsToRequestIsTrueSeldomly {
-    NSURL *url = [NSURL URLWithString:@"https://random.com/Low"];
-    NSError *error = [NSError errorWithDomain:@"Domain" code:1 userInfo:nil];
-    
-    [[TFFChaosMonkeyURLMapper sharedInstance] mapURL:url withError:error priority:TFFChaosMonkeyPriorityLow];
-    
-    int responses = 0;
-    for (int i = 0; i < 100; ++i) {
-        if ([[TFFChaosMonkeyURLMapper sharedInstance] respondToRequestRespectingPriority:[NSURLRequest requestWithURL:url]]) {
-            responses++;
-        }
-    }
-    
-    XCTAssertEqualWithAccuracy(responses, 25, EPSILON);
+    XCTAssertTrue(responses > 25);
 }
 
 @end
