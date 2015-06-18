@@ -25,33 +25,6 @@
     [self assertSuccessfulOfflineRequest];
 }
 
-- (void)testWhenInjectingErrorForAllRequestsMatchingThatHostWithHighPriorityThenNetworkRequestsForThatHostMostlyReturnThatError {
-    NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
-    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/injectHigh"] returningError:expectedError priority:TFFChaosMonkeyPriorityHigh];
-    
-    int countOfErrors = [self countOfErrorsForRequestWithURL:[NSURL URLWithString:@"https://website.abc/injectHigh"] expectedError:expectedError];
-    
-    XCTAssertEqualWithAccuracy(countOfErrors, 75, 12);
-}
-
-- (void)testWhenInjectingErrorForAllRequestsMatchingThatHostWithMediumPriorityThenNetworkRequestsForThatHostSometimesReturnThatError {
-    NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
-    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/injectMedium"] returningError:expectedError priority:TFFChaosMonkeyPriorityMedium];
-    
-    int countOfErrors = [self countOfErrorsForRequestWithURL:[NSURL URLWithString:@"https://website.abc/injectMedium"] expectedError:expectedError];
-    
-    XCTAssertEqualWithAccuracy(countOfErrors, 50, 12);
-}
-
-- (void)testWhenInjectingErrorForAllRequestsMatchingThatHostWithLowPriorityThenNetworkRequestsForThatHostSeldomReturnThatError {
-    NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
-    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/injectLow"] returningError:expectedError priority:TFFChaosMonkeyPriorityLow];
-    
-    int countOfErrors = [self countOfErrorsForRequestWithURL:[NSURL URLWithString:@"https://website.abc/injectLow"] expectedError:expectedError];
-    
-    XCTAssertEqualWithAccuracy(countOfErrors, 25, 12);
-}
-
 - (BOOL)error:(NSError *)expectedError isEqualToError:(NSError *)actualError {
     return [expectedError.domain isEqualToString:actualError.domain] &&
     expectedError.code == actualError.code &&
@@ -78,17 +51,6 @@
     [self waitForExpectationsWithTimeout:2 handler:^(NSError *error) {
         XCTAssertNil(error);
     }];
-}
-
-- (int)countOfErrorsForRequestWithURL:(NSURL *)url  expectedError:(NSError *)expectedError {
-    int countOfErrors = 0;
-    for (int i = 0; i < 100; ++i) {
-        NSError *actualError;
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&actualError];
-        countOfErrors += ([self error:expectedError isEqualToError:actualError]) ? 1 : 0;
-    }
-    return countOfErrors;
 }
 
 @end

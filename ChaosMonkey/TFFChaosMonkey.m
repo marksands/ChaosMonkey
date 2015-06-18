@@ -3,8 +3,6 @@
 
 @interface TFFChaosMonkey () <NSURLConnectionDelegate>
 
-@property (nonatomic, readonly) NSURLConnection *URLConnection;
-
 @end
 
 @implementation TFFChaosMonkey
@@ -15,8 +13,9 @@
     return [[TFFChaosMonkeyURLMapper sharedInstance] mapURL:url withError:error priority:priority];
 }
 
+// This method may be called multiple times per request
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-	return [[TFFChaosMonkeyURLMapper sharedInstance] canInitializeRequest:request];
+	return [[TFFChaosMonkeyURLMapper sharedInstance] respondToRequestRespectingPriority:request];
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
@@ -28,7 +27,7 @@
 }
 
 - (void)startLoading {
-    NSError *error = [[TFFChaosMonkeyURLMapper sharedInstance] errorMappingForURL:self.request.URL];
+    NSError *error = [[TFFChaosMonkeyURLMapper sharedInstance] errorResponseForURL:self.request.URL];
     [self.client URLProtocol:self didFailWithError:error];
 }
 

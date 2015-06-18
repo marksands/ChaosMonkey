@@ -8,7 +8,7 @@
 + (instancetype)sharedInstance;
 
 - (void)mapURL:(NSURL *)url withError:(NSError *)error priority:(TFFChaosMonkeyPriority)priority;
-- (NSError *)errorMappingForURL:(NSURL *)url;
-- (BOOL)canInitializeRequest:(NSURLRequest *)request;
+- (NSError *)errorResponseForURL:(NSURL *)url;
+- (BOOL)respondToRequestRespectingPriority:(NSURLRequest *)request;
 
 @end
