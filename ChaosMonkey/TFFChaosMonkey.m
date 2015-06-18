@@ -12,7 +12,7 @@
 + (void)injectURL:(NSURL *)url returningError:(NSError *)error priority:(TFFChaosMonkeyPriority)priority {
 	[NSURLProtocol registerClass:self];
 
-	return [[TFFChaosMonkeyURLMapper sharedInstance] mapURL:url withError:error];
+    return [[TFFChaosMonkeyURLMapper sharedInstance] mapURL:url withError:error priority:priority];
 }
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {

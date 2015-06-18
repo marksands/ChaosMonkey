@@ -1,7 +1,10 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, TFFChaosMonkeyPriority) {
-	TFFChaosMonkeyPriorityAlways
+	TFFChaosMonkeyPriorityAlways,
+    TFFChaosMonkeyPriorityHigh,
+    TFFChaosMonkeyPriorityMedium,
+    TFFChaosMonkeyPriorityLow
 };
 
 @interface TFFChaosMonkey : NSURLProtocol

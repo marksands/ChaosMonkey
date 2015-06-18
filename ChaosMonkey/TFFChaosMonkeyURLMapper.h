@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "TFFChaosMonkey.h"
 
 @interface TFFChaosMonkeyURLMapper : NSObject
 
@@ -6,7 +7,7 @@
 
 + (instancetype)sharedInstance;
 
-- (void)mapURL:(NSURL *)url withError:(NSError *)error;
+- (void)mapURL:(NSURL *)url withError:(NSError *)error priority:(TFFChaosMonkeyPriority)priority;
 - (NSError *)errorMappingForURL:(NSURL *)url;
 - (BOOL)canInitializeRequest:(NSURLRequest *)request;
 
