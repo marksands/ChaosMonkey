@@ -21,6 +21,22 @@
     XCTAssertEqualObjects(expectedError.localizedDescription, actualError.localizedDescription);
 }
 
+- (void)assertSuccessfulOfflineRequest {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"offline request"];
+    
+    NSString *filePath = [[NSBundle bundleForClass:self.class] pathForResource:@"file" ofType:@"txt"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:filePath]];
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        XCTAssertNil(error);
+        [expectation fulfill];
+    }];
+    [task resume];
+    
+    [self waitForExpectationsWithTimeout:2 handler:^(NSError *error) {
+        XCTAssertNil(error);
+    }];
+}
+
 - (void)testWhenInjectingErrorForAllRequestsMatchingThatHostThenNetworkRequestsForThatHostAlwaysReturnThatError {
     NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
     [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/inject"] returningError:expectedError priority:TFFChaosMonkeyPriorityAlways];
@@ -30,6 +46,13 @@
     [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&actualError];
     
     [self assertThatError:expectedError isEqualToError:actualError];
+}
+
+- (void)testWhenNothingIsInjectedForASpecifiedURLThenRequestsForThatURLMayExecuteAsExepcted {
+    NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
+    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/fail"] returningError:expectedError priority:TFFChaosMonkeyPriorityAlways];
+    
+    [self assertSuccessfulOfflineRequest];
 }
 
 @end

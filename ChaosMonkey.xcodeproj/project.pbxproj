@@ -13,6 +13,7 @@
 		4D5C74161B312ED10015DB7E /* TFFURLResponseMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C74141B312ED10015DB7E /* TFFURLResponseMap.m */; };
 		4D5C74191B31303F0015DB7E /* TFFChaosMonkeyURLMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D5C74171B31303F0015DB7E /* TFFChaosMonkeyURLMapper.h */; };
 		4D5C741A1B31303F0015DB7E /* TFFChaosMonkeyURLMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C74181B31303F0015DB7E /* TFFChaosMonkeyURLMapper.m */; };
+		4D5C741C1B325A570015DB7E /* file.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4D5C741B1B325A570015DB7E /* file.txt */; };
 		4DDD4EC51B311FDE00C6565B /* ChaosMonkey.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DDD4EC41B311FDE00C6565B /* ChaosMonkey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4DDD4ECB1B311FDE00C6565B /* ChaosMonkey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDD4EBF1B311FDE00C6565B /* ChaosMonkey.framework */; };
 		4DDD4ED21B311FDE00C6565B /* ChaosMonkeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DDD4ED11B311FDE00C6565B /* ChaosMonkeyTests.m */; };
@@ -36,6 +37,7 @@
 		4D5C74141B312ED10015DB7E /* TFFURLResponseMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFURLResponseMap.m; sourceTree = "<group>"; };
 		4D5C74171B31303F0015DB7E /* TFFChaosMonkeyURLMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFFChaosMonkeyURLMapper.h; sourceTree = "<group>"; };
 		4D5C74181B31303F0015DB7E /* TFFChaosMonkeyURLMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFChaosMonkeyURLMapper.m; sourceTree = "<group>"; };
+		4D5C741B1B325A570015DB7E /* file.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = file.txt; sourceTree = "<group>"; };
 		4DDD4EBF1B311FDE00C6565B /* ChaosMonkey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChaosMonkey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DDD4EC31B311FDE00C6565B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4DDD4EC41B311FDE00C6565B /* ChaosMonkey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChaosMonkey.h; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		4DDD4ECE1B311FDE00C6565B /* ChaosMonkeyTests */ = {
 			isa = PBXGroup;
 			children = (
+				4D5C741B1B325A570015DB7E /* file.txt */,
 				4DDD4ED11B311FDE00C6565B /* ChaosMonkeyTests.m */,
 				4DDD4ECF1B311FDE00C6565B /* Supporting Files */,
 			);
@@ -223,6 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D5C741C1B325A570015DB7E /* file.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
