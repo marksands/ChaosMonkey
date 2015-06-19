@@ -15,7 +15,7 @@
 	testObject = [[TFFFixedEffectRandomizer alloc] init];
 }
 
-- (void)testWhenRequestingRandomBoolForMappingWithAlwaysPriorityThenBoolAlwaysReturnsYes {
+- (void)testWhenRequestingRandomBoolWithFixedPercentageThenBoolAlwaysReturnsYes {
     for (int i = 0; i < 100; ++i) {
         if ([testObject nextRandomBoolWithFixedPercentage:1.0]) {
             ++positiveCounts;
@@ -25,7 +25,7 @@
     XCTAssertEqual(positiveCounts, 100);
 }
 
-- (void)testWhenRequestingRandomBoolForMappingWithHighPriorityThenBoolReturnsYesThreeQuartersOfTheTime {
+- (void)testWhenRequestingRandomBoolWithFixedPercentageThenBoolSometimesReturnsYes {
     for (int i = 0; i < 100; ++i) {
         if ([testObject nextRandomBoolWithFixedPercentage:0.63]) {
             ++positiveCounts;
@@ -33,6 +33,24 @@
     }
     
     XCTAssertEqual(positiveCounts, 63);
+}
+
+- (void)testWhenRequestingRandomBoolWithFixedPercentageThenConsecutiveStreaksOccur {
+	int longestStreak = 0;
+	int currentStreak = 0;
+
+	for (int i = 0; i < 250; ++i) {
+		if ([testObject nextRandomBoolWithFixedPercentage:0.70]) {
+			++positiveCounts;
+			currentStreak++;
+		} else {
+			longestStreak = MAX(longestStreak, currentStreak);
+			currentStreak = 0;
+		}
+	}
+
+	XCTAssertEqual(positiveCounts, 175);
+	XCTAssertEqual(longestStreak, 3);
 }
 
 @end
