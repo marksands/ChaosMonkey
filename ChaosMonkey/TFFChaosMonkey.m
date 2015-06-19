@@ -1,21 +1,19 @@
 #import "TFFChaosMonkey.h"
-#import "TFFChaosMonkeyURLMapper.h"
+#import "TFFFailingURLRunner.h"
 
-@interface TFFChaosMonkey () <NSURLConnectionDelegate>
-
+@interface TFFChaosMonkey() <NSURLConnectionDelegate>
 @end
 
 @implementation TFFChaosMonkey
 
-+ (void)injectURL:(NSURL *)url returningError:(NSError *)error priority:(TFFChaosMonkeyPriority)priority {
++ (void)injectURL:(NSURL *)url returningError:(NSError *)error priority:(TFFChaosInjectorFailingPriority)priority {
 	[NSURLProtocol registerClass:self];
-
-    return [[TFFChaosMonkeyURLMapper sharedInstance] mapURL:url withError:error priority:priority];
+    return [[TFFFailingURLRunner sharedInstance] mapURL:url withError:error priority:priority];
 }
 
 // This method may be called multiple times per request
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-	return [[TFFChaosMonkeyURLMapper sharedInstance] respondToRequestRespectingPriority:request];
+	return [[TFFFailingURLRunner sharedInstance] respondToRequestRespectingPriority:request];
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
@@ -27,12 +25,11 @@
 }
 
 - (void)startLoading {
-    NSError *error = [[TFFChaosMonkeyURLMapper sharedInstance] errorResponseForURL:self.request.URL];
+    NSError *error = [[TFFFailingURLRunner sharedInstance] errorResponseForURL:self.request.URL];
     [self.client URLProtocol:self didFailWithError:error];
 }
 
 - (void)stopLoading {
-    
 }
 
 @end

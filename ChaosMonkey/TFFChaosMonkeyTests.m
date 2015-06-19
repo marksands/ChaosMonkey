@@ -9,8 +9,8 @@
 
 - (void)testWhenInjectingErrorForAllRequestsMatchingThatHostThenNetworkRequestsForThatHostAlwaysReturnThatError {
     NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
-    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/inject"] returningError:expectedError priority:TFFChaosMonkeyPriorityAlways];
-    
+    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/inject"] returningError:expectedError priority:TFFChaosInjectorFailingPriorityAlways];
+
     NSError *actualError;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://website.abc/inject"]];
     [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&actualError];
@@ -18,17 +18,11 @@
     [self assertThatError:expectedError isEqualToError:actualError];
 }
 
-- (void)testWhenNothingIsInjectedForASpecifiedURLThenRequestsForThatURLMayExecuteAsExepcted {
+- (void)testWhenNothingIsInjectedForASpecifiedURLThenRequestsForThatURLMayExecuteAsExpected {
     NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
-    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/fail"] returningError:expectedError priority:TFFChaosMonkeyPriorityAlways];
+    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/fail"] returningError:expectedError priority:TFFChaosInjectorFailingPriorityAlways];
     
     [self assertSuccessfulOfflineRequest];
-}
-
-- (BOOL)error:(NSError *)expectedError isEqualToError:(NSError *)actualError {
-    return [expectedError.domain isEqualToString:actualError.domain] &&
-    expectedError.code == actualError.code &&
-    [expectedError.localizedDescription isEqualToString:actualError.localizedDescription];
 }
 
 - (void)assertThatError:(NSError *)expectedError isEqualToError:(NSError *)actualError {

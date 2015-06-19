@@ -1,14 +1,14 @@
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, TFFChaosMonkeyPriority) {
-	TFFChaosMonkeyPriorityAlways,
-    TFFChaosMonkeyPriorityHigh,
-    TFFChaosMonkeyPriorityMedium,
-    TFFChaosMonkeyPriorityLow
+typedef NS_ENUM(NSInteger, TFFChaosInjectorFailingPriority) {
+	TFFChaosInjectorFailingPriorityAlways,
+	TFFChaosInjectorFailingPriorityHigh,
+	TFFChaosInjectorFailingPriorityMedium,
+	TFFChaosInjectorFailingPriorityLow
 };
 
 @interface TFFChaosMonkey : NSURLProtocol
 
-+ (void)injectURL:(NSURL *)url returningError:(NSError *)error priority:(TFFChaosMonkeyPriority)priority;
++ (void)injectURL:(NSURL *)url returningError:(NSError *)error priority:(TFFChaosInjectorFailingPriority)priority;
 
 @end
