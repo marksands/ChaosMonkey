@@ -38,7 +38,7 @@
 
 - (BOOL)canInitializeRequest:(NSURL *)url {
 	BOOL canInitializeRequest = NO;
-	if (self.urlForErrorDictionary[url.absoluteString]) {
+	if ([self errorWithURL:url]) {
 		canInitializeRequest = self.randomNumberProvider.nextRandom > 0.5;
 	}
 	return canInitializeRequest;
@@ -47,11 +47,29 @@
 - (NSError *)errorWithURL:(NSURL *)url {
 	NSError *error = nil;
 	for (NSString *urlKey in self.urlForErrorDictionary) {
-		if ([urlKey isEqualToString:url.absoluteString]) {
+		if ([self stubbedURLKey:urlKey matchesURLOrSingleStubbedHost:url]) {
 			error = self.urlForErrorDictionary[urlKey];
 		}
 	}
 	return error;
+}
+
+- (BOOL)stubbedURLKey:(NSString *)urlKey matchesURLOrSingleStubbedHost:(NSURL *)url {
+    BOOL urlKeyMatchesSingleHostInStubbedResponses = NO;
+    
+    if (urlKey.pathComponents.count == 2 && [urlKey.pathComponents.firstObject rangeOfString:@"http"].location != NSNotFound) {
+        for (NSString *key in self.urlForErrorDictionary) {
+            BOOL keyMatchesHost = [[key pathComponents] containsObject:url.host] || [[key pathComponents] containsObject:[NSString stringWithFormat:@"%@:%@",url.host,url.port]];
+            if (urlKeyMatchesSingleHostInStubbedResponses && keyMatchesHost) {
+                urlKeyMatchesSingleHostInStubbedResponses = NO;
+                break;
+            } else if (keyMatchesHost) {
+                urlKeyMatchesSingleHostInStubbedResponses = YES;
+            }
+        }
+    }
+
+    return [urlKey isEqualToString:url.absoluteString] || urlKeyMatchesSingleHostInStubbedResponses;
 }
 
 @end

@@ -56,6 +56,28 @@
 	[self verifyError:error fromURL:url];
 }
 
+- (void)testWhenStubbingErrorResponseForHostAndRequestIsMadeForMatchingHostsAndRandomNumberProviderReturnsTrueThenAllResponsesStubbed {
+	NSError *error = [NSError errorWithDomain:@"hostdomain" code:777 userInfo:nil];
+	NSError *error2 = [NSError errorWithDomain:@"hostdomain2" code:999 userInfo:nil];
+	NSURL *host = [NSURL URLWithString:@"https://api.example.com:9000"];
+	NSURL *host2 = [NSURL URLWithString:@"http://api.hostwithoutport.net/"];
+	testObject = [self stubURL:host returningError:error randomNumbers:@[@1, @1, @1, @1, @1]];
+	[testObject stubURL:host2 returningError:error2];
+
+	NSURL *url1 = [NSURL URLWithString:@"https://api.example.com:9000/withEndpoint"];
+	NSURL *url2 = [NSURL URLWithString:@"https://api.example.com:9000/withQueryString=1"];
+	NSURL *url3 = [NSURL URLWithString:@"https://api.example.com:9000/withEndpiont/andExtended=1&queryString=2"];
+	NSURL *url4 = [NSURL URLWithString:@"http://api.hostwithoutport.net/withEndpiont1/andQueryString=2"];
+	NSURL *url5 = [NSURL URLWithString:@"http://api.hostwithoutport.net/withEndpiont2/andQueryString=2"];
+
+	[self verifyError:error fromURL:url1];
+	[self verifyError:error fromURL:url2];
+	[self verifyError:error fromURL:url3];
+	[self verifyError:error fromURL:url4];
+	[self verifyError:error fromURL:url5];
+
+}
+
 - (TFFChaosMonkey *)stubURL:(NSURL *)url returningError:(NSError *)error randomNumbers:(NSArray *)randomNumbers {
 	randomNumberProvider = [[TFFMockRandomNumberProvider alloc] initWithGeneratedRandomNumbers:randomNumbers];
 	testObject = [[TFFChaosMonkey alloc] initWithRandomNumberProvider:randomNumberProvider];
