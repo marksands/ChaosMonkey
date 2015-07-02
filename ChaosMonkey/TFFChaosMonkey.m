@@ -3,7 +3,11 @@
 @interface TFFURLStubManager : NSObject
 
 @property (nonatomic) NSMutableDictionary *urlForErrorDictionary;
+@property (nonatomic) TFFRandomNumberProvider *randomNumberProvider;
 
+- (void)addStubbedURL:(NSURL *)url withError:(NSError *)error;
+
+- (void)resetRandomNumberProvider:(TFFRandomNumberProvider *)provider;
 @end
 
 @implementation TFFURLStubManager
@@ -23,7 +27,8 @@
 	return self;
 }
 
-- (void)reset {
+- (void)resetRandomNumberProvider:(TFFRandomNumberProvider *)randomNumberProvider {
+	self.randomNumberProvider = randomNumberProvider;
     [self.urlForErrorDictionary removeAllObjects];
 }
 
@@ -31,14 +36,12 @@
 	self.urlForErrorDictionary[url.absoluteString] = error;
 }
 
-- (NSString *)existingURLStringWithURL:(NSURL *)url {
-	NSString *absoluteURL = nil;
-	for (NSString *urlKey in self.urlForErrorDictionary) {
-		if ([urlKey isEqualToString:url.absoluteString]) {
-			absoluteURL = urlKey;
-		}
+- (BOOL)canInitializeRequest:(NSURL *)url {
+	BOOL canInitializeRequest = NO;
+	if (self.urlForErrorDictionary[url.absoluteString]) {
+		canInitializeRequest = self.randomNumberProvider.nextRandom > 0.5;
 	}
-	return absoluteURL;
+	return canInitializeRequest;
 }
 
 - (NSError *)errorWithURL:(NSURL *)url {
@@ -61,7 +64,7 @@
 @implementation TFFURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-	return [[TFFURLStubManager sharedManager] existingURLStringWithURL:request.URL] != nil;
+	return [[TFFURLStubManager sharedManager] canInitializeRequest:request.URL];
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
@@ -84,10 +87,6 @@
 
 #pragma mark -
 
-@interface TFFChaosMonkey() <NSURLConnectionDelegate>
-@property (nonatomic, readonly) TFFRandomNumberProvider *randomNumberProvider;
-@end
-
 @implementation TFFChaosMonkey
 
 - (void)stubURL:(NSURL *)url returningError:(NSError *)error {
@@ -96,9 +95,9 @@
 
 - (instancetype)initWithRandomNumberProvider:(TFFRandomNumberProvider *)randomNumberProvider {
 	self = [super init];
+    [NSURLProtocol unregisterClass:TFFURLProtocol.class];
     [NSURLProtocol registerClass:TFFURLProtocol.class];
-    [[TFFURLStubManager sharedManager] reset];
-	_randomNumberProvider = randomNumberProvider;
+    [[TFFURLStubManager sharedManager] resetRandomNumberProvider:randomNumberProvider];
 	return self;
 }
 
