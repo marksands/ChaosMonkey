@@ -1,14 +1,11 @@
 #import <Foundation/Foundation.h>
+#import "TFFRandomNumberProvider.h"
 
-typedef NS_ENUM(NSInteger, TFFChaosInjectorFailingPriority) {
-	TFFChaosInjectorFailingPriorityAlways,
-	TFFChaosInjectorFailingPriorityHigh,
-	TFFChaosInjectorFailingPriorityMedium,
-	TFFChaosInjectorFailingPriorityLow
-};
+@interface TFFChaosMonkey : NSObject
 
-@interface TFFChaosMonkey : NSURLProtocol
+- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)initWithRandomNumberProvider:(TFFRandomNumberProvider *)randomNumberProvider;
 
-+ (void)injectURL:(NSURL *)url returningError:(NSError *)error priority:(TFFChaosInjectorFailingPriority)priority;
+- (void)stubURL:(NSURL *)url returningError:(NSError *)error;
 
 @end

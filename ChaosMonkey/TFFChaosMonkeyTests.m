@@ -1,50 +1,54 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "TFFChaosMonkey.h"
+#import "TFFMockRandomNumberProvider.h"
 
-@interface TFFChaosMonkeyTests : XCTestCase
+@interface TFFChaosMonkeyTests : XCTestCase {
+	TFFMockRandomNumberProvider *randomNumberProvider;
+	TFFChaosMonkey *testObject;
+}
 @end
 
 @implementation TFFChaosMonkeyTests
 
-- (void)testWhenInjectingErrorForAllRequestsMatchingThatHostThenNetworkRequestsForThatHostAlwaysReturnThatError {
-    NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
-    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/inject"] returningError:expectedError priority:TFFChaosInjectorFailingPriorityAlways];
+- (void)testWhenStubbingErrorResponseForAURLAndARequestIsMadeForThatURLAndRandomNumberProviderReturnsTrueThenStubbedErrorResponseIsReturned {
+	randomNumberProvider = [[TFFMockRandomNumberProvider alloc] initWithGeneratedRandomNumbers:@[@1]];
+	NSError *error = [NSError errorWithDomain:@"domain" code:3 userInfo:nil];
+	NSURL *url = [NSURL URLWithString:@"https://api.example.com/endpoint?withQueryString=1"];
 
-    NSError *actualError;
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://website.abc/inject"]];
-    [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&actualError];
-    
-    [self assertThatError:expectedError isEqualToError:actualError];
+	testObject = [[TFFChaosMonkey alloc] initWithRandomNumberProvider:randomNumberProvider];
+	[testObject stubURL:url returningError:error];
+
+	[self verifyError:error	fromURL:url];
+
+	NSURL *urlWithDifferingEndpoint = [NSURL URLWithString:@"https://api.example.com/endpoint2?withQueryString=2"];
+	[self verifyNoError:error fromURL:urlWithDifferingEndpoint];
 }
 
-- (void)testWhenNothingIsInjectedForASpecifiedURLThenRequestsForThatURLMayExecuteAsExpected {
-    NSError *expectedError = [NSError errorWithDomain:@"ChaosDomain" code:1337 userInfo:@{NSLocalizedDescriptionKey:@"An error has occurred!"}];
-    [TFFChaosMonkey injectURL:[NSURL URLWithString:@"https://website.abc/fail"] returningError:expectedError priority:TFFChaosInjectorFailingPriorityAlways];
-    
-    [self assertSuccessfulOfflineRequest];
+- (void)verifyError:(NSError *)error fromURL:(NSURL *)url {
+	XCTestExpectation *expectation = [self expectationWithDescription:@"request"];
+	[[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *networkError) {
+		XCTAssertEqual(error.code, networkError.code);
+		XCTAssertEqualObjects(error.domain, networkError.domain);
+		[expectation fulfill];
+	}] resume];
+
+	[self waitForExpectationsWithTimeout:1 handler:^(NSError *expectationError) {
+		XCTAssertNil(expectationError);
+	}];
 }
 
-- (void)assertThatError:(NSError *)expectedError isEqualToError:(NSError *)actualError {
-    XCTAssertEqualObjects(expectedError.domain, actualError.domain);
-    XCTAssertEqual(expectedError.code, actualError.code);
-    XCTAssertEqualObjects(expectedError.localizedDescription, actualError.localizedDescription);
-}
-
-- (void)assertSuccessfulOfflineRequest {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"offline request"];
-    
-    NSString *filePath = [[NSBundle bundleForClass:self.class] pathForResource:@"file" ofType:@"txt"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:filePath]];
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        XCTAssertNil(error);
+- (void)verifyNoError:(NSError *)error fromURL:(NSURL *)url {
+	XCTestExpectation *expectation = [self expectationWithDescription:@"request"];
+	[[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *networkError) {
+		XCTAssertNotEqual(error.code, networkError.code);
+		XCTAssertNotEqualObjects(error.domain, networkError.domain);
         [expectation fulfill];
-    }];
-    [task resume];
-    
-    [self waitForExpectationsWithTimeout:2 handler:^(NSError *error) {
-        XCTAssertNil(error);
-    }];
+	}] resume];
+
+	[self waitForExpectationsWithTimeout:1 handler:^(NSError *expectationError) {
+		XCTAssertNil(expectationError);
+	}];
 }
 
 @end

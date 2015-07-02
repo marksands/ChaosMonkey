@@ -9,15 +9,11 @@
 /* Begin PBXBuildFile section */
 		3306CCCF4E93052A1DBCAFE0 /* TFFChaosMonkey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306C78537C0E0890B24CAA6 /* TFFChaosMonkey.m */; };
 		3306CCEF66860BE50C3758A0 /* TFFChaosMonkey.h in Headers */ = {isa = PBXBuildFile; fileRef = 3306C9DB6517195BFAB5004F /* TFFChaosMonkey.h */; };
-		4D5C74151B312ED10015DB7E /* TFFPrioritizedFailingURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D5C74131B312ED10015DB7E /* TFFPrioritizedFailingURL.h */; };
-		4D5C74161B312ED10015DB7E /* TFFPrioritizedFailingURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C74141B312ED10015DB7E /* TFFPrioritizedFailingURL.m */; };
-		4D5C74191B31303F0015DB7E /* TFFFailingURLRunner.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D5C74171B31303F0015DB7E /* TFFFailingURLRunner.h */; };
-		4D5C741A1B31303F0015DB7E /* TFFFailingURLRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C74181B31303F0015DB7E /* TFFFailingURLRunner.m */; };
 		4D5C741C1B325A570015DB7E /* file.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4D5C741B1B325A570015DB7E /* file.txt */; };
-		4D5C741E1B3267A50015DB7E /* TFFFailingURLRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C741D1B3267A50015DB7E /* TFFFailingURLRunnerTests.m */; };
-		4D5C74211B326CA30015DB7E /* TFFFixedEffectRandomizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D5C741F1B326CA30015DB7E /* TFFFixedEffectRandomizer.h */; };
-		4D5C74221B326CA30015DB7E /* TFFFixedEffectRandomizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C74201B326CA30015DB7E /* TFFFixedEffectRandomizer.m */; };
-		4D5C74241B3271280015DB7E /* TFFFixedEffectRandomizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D5C74231B3271280015DB7E /* TFFFixedEffectRandomizerTests.m */; };
+		4DC32EA01B44D49600395EF7 /* TFFRandomNumberProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DC32E9E1B44D49600395EF7 /* TFFRandomNumberProvider.h */; };
+		4DC32EA11B44D49600395EF7 /* TFFRandomNumberProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC32E9F1B44D49600395EF7 /* TFFRandomNumberProvider.m */; };
+		4DC32EA41B44D54F00395EF7 /* TFFMockRandomNumberProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DC32EA21B44D54F00395EF7 /* TFFMockRandomNumberProvider.h */; };
+		4DC32EA51B44D54F00395EF7 /* TFFMockRandomNumberProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DC32EA31B44D54F00395EF7 /* TFFMockRandomNumberProvider.m */; };
 		4DDD4ECB1B311FDE00C6565B /* ChaosMonkey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDD4EBF1B311FDE00C6565B /* ChaosMonkey.framework */; };
 		4DDD4EDC1B311FF200C6565B /* TFFChaosMonkeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DDD4EDB1B311FF200C6565B /* TFFChaosMonkeyTests.m */; };
 /* End PBXBuildFile section */
@@ -35,15 +31,11 @@
 /* Begin PBXFileReference section */
 		3306C78537C0E0890B24CAA6 /* TFFChaosMonkey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFChaosMonkey.m; sourceTree = "<group>"; };
 		3306C9DB6517195BFAB5004F /* TFFChaosMonkey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFFChaosMonkey.h; sourceTree = "<group>"; };
-		4D5C74131B312ED10015DB7E /* TFFPrioritizedFailingURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFFPrioritizedFailingURL.h; sourceTree = "<group>"; };
-		4D5C74141B312ED10015DB7E /* TFFPrioritizedFailingURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFPrioritizedFailingURL.m; sourceTree = "<group>"; };
-		4D5C74171B31303F0015DB7E /* TFFFailingURLRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFFFailingURLRunner.h; sourceTree = "<group>"; };
-		4D5C74181B31303F0015DB7E /* TFFFailingURLRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFFailingURLRunner.m; sourceTree = "<group>"; };
 		4D5C741B1B325A570015DB7E /* file.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = file.txt; sourceTree = "<group>"; };
-		4D5C741D1B3267A50015DB7E /* TFFFailingURLRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFFailingURLRunnerTests.m; sourceTree = "<group>"; };
-		4D5C741F1B326CA30015DB7E /* TFFFixedEffectRandomizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFFFixedEffectRandomizer.h; sourceTree = "<group>"; };
-		4D5C74201B326CA30015DB7E /* TFFFixedEffectRandomizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFFixedEffectRandomizer.m; sourceTree = "<group>"; };
-		4D5C74231B3271280015DB7E /* TFFFixedEffectRandomizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFFixedEffectRandomizerTests.m; sourceTree = "<group>"; };
+		4DC32E9E1B44D49600395EF7 /* TFFRandomNumberProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFFRandomNumberProvider.h; sourceTree = "<group>"; };
+		4DC32E9F1B44D49600395EF7 /* TFFRandomNumberProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFRandomNumberProvider.m; sourceTree = "<group>"; };
+		4DC32EA21B44D54F00395EF7 /* TFFMockRandomNumberProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFFMockRandomNumberProvider.h; sourceTree = "<group>"; };
+		4DC32EA31B44D54F00395EF7 /* TFFMockRandomNumberProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFFMockRandomNumberProvider.m; sourceTree = "<group>"; };
 		4DDD4EBF1B311FDE00C6565B /* ChaosMonkey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ChaosMonkey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DDD4EC31B311FDE00C6565B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4DDD4ECA1B311FDE00C6565B /* ChaosMonkeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChaosMonkeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,14 +87,10 @@
 				3306C9DB6517195BFAB5004F /* TFFChaosMonkey.h */,
 				3306C78537C0E0890B24CAA6 /* TFFChaosMonkey.m */,
 				4DDD4EDB1B311FF200C6565B /* TFFChaosMonkeyTests.m */,
-				4D5C74131B312ED10015DB7E /* TFFPrioritizedFailingURL.h */,
-				4D5C74141B312ED10015DB7E /* TFFPrioritizedFailingURL.m */,
-				4D5C74171B31303F0015DB7E /* TFFFailingURLRunner.h */,
-				4D5C74181B31303F0015DB7E /* TFFFailingURLRunner.m */,
-				4D5C741D1B3267A50015DB7E /* TFFFailingURLRunnerTests.m */,
-				4D5C741F1B326CA30015DB7E /* TFFFixedEffectRandomizer.h */,
-				4D5C74201B326CA30015DB7E /* TFFFixedEffectRandomizer.m */,
-				4D5C74231B3271280015DB7E /* TFFFixedEffectRandomizerTests.m */,
+				4DC32E9E1B44D49600395EF7 /* TFFRandomNumberProvider.h */,
+				4DC32E9F1B44D49600395EF7 /* TFFRandomNumberProvider.m */,
+				4DC32EA21B44D54F00395EF7 /* TFFMockRandomNumberProvider.h */,
+				4DC32EA31B44D54F00395EF7 /* TFFMockRandomNumberProvider.m */,
 			);
 			path = ChaosMonkey;
 			sourceTree = "<group>";
@@ -139,10 +127,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D5C74191B31303F0015DB7E /* TFFFailingURLRunner.h in Headers */,
+				4DC32EA01B44D49600395EF7 /* TFFRandomNumberProvider.h in Headers */,
+				4DC32EA41B44D54F00395EF7 /* TFFMockRandomNumberProvider.h in Headers */,
 				3306CCEF66860BE50C3758A0 /* TFFChaosMonkey.h in Headers */,
-				4D5C74211B326CA30015DB7E /* TFFFixedEffectRandomizer.h in Headers */,
-				4D5C74151B312ED10015DB7E /* TFFPrioritizedFailingURL.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,10 +230,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D5C74161B312ED10015DB7E /* TFFPrioritizedFailingURL.m in Sources */,
 				3306CCCF4E93052A1DBCAFE0 /* TFFChaosMonkey.m in Sources */,
-				4D5C741A1B31303F0015DB7E /* TFFFailingURLRunner.m in Sources */,
-				4D5C74221B326CA30015DB7E /* TFFFixedEffectRandomizer.m in Sources */,
+				4DC32EA51B44D54F00395EF7 /* TFFMockRandomNumberProvider.m in Sources */,
+				4DC32EA11B44D49600395EF7 /* TFFRandomNumberProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,9 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D5C74241B3271280015DB7E /* TFFFixedEffectRandomizerTests.m in Sources */,
 				4DDD4EDC1B311FF200C6565B /* TFFChaosMonkeyTests.m in Sources */,
-				4D5C741E1B3267A50015DB7E /* TFFFailingURLRunnerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +350,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ChaosMonkey/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -381,6 +366,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ChaosMonkey/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -400,6 +386,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ChaosMonkeyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -413,6 +400,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = ChaosMonkeyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
