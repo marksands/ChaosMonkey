@@ -25,6 +25,24 @@
 	[self verifyNoError:error fromURL:urlWithDifferingEndpoint];
 }
 
+- (void)testWhenStubbingErrorResponseForMultipleURLsAndRequestIsMadeForAllURLsAndRandomNumberProviderReturnsTrueThenStubbedErrorResponsesAreReturned {
+	randomNumberProvider = [[TFFMockRandomNumberProvider alloc] initWithGeneratedRandomNumbers:@[@1, @1]];
+	NSError *error1 = [NSError errorWithDomain:@"domain1" code:333 userInfo:nil];
+	NSError *error2 = [NSError errorWithDomain:@"domain2" code:444 userInfo:nil];
+	NSURL *url1 = [NSURL URLWithString:@"https://api.example.com/endpoint1"];
+	NSURL *url2 = [NSURL URLWithString:@"https://api.example.com/endpoint2"];
+    
+    testObject = [[TFFChaosMonkey alloc] initWithRandomNumberProvider:randomNumberProvider];
+    [testObject stubURL:url1 returningError:error1];
+    [testObject stubURL:url2 returningError:error2];
+
+    [self verifyError:error1 fromURL:url1];
+    [self verifyError:error2 fromURL:url2];
+    [self verifyError:error1 fromURL:url1];
+    [self verifyError:error1 fromURL:url1];
+    [self verifyError:error2 fromURL:url2];
+}
+
 - (void)verifyError:(NSError *)error fromURL:(NSURL *)url {
 	XCTestExpectation *expectation = [self expectationWithDescription:@"request"];
 	[[[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *networkError) {

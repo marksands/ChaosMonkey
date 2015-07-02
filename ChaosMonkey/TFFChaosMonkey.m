@@ -2,8 +2,7 @@
 
 @interface TFFURLStubManager : NSObject
 
-@property (nonatomic) NSURL *stubbedURL;
-@property (nonatomic) NSError *stubbedError;
+@property (nonatomic) NSMutableDictionary *urlForErrorDictionary;
 
 @end
 
@@ -18,6 +17,40 @@
     return sharedInstance;
 }
 
+- (instancetype)init {
+	self = [super init];
+	_urlForErrorDictionary = [NSMutableDictionary dictionary];
+	return self;
+}
+
+- (void)reset {
+    [self.urlForErrorDictionary removeAllObjects];
+}
+
+- (void)addStubbedURL:(NSURL *)url withError:(NSError *)error {
+	self.urlForErrorDictionary[url.absoluteString] = error;
+}
+
+- (NSString *)existingURLStringWithURL:(NSURL *)url {
+	NSString *absoluteURL = nil;
+	for (NSString *urlKey in self.urlForErrorDictionary) {
+		if ([urlKey isEqualToString:url.absoluteString]) {
+			absoluteURL = urlKey;
+		}
+	}
+	return absoluteURL;
+}
+
+- (NSError *)errorWithURL:(NSURL *)url {
+	NSError *error = nil;
+	for (NSString *urlKey in self.urlForErrorDictionary) {
+		if ([urlKey isEqualToString:url.absoluteString]) {
+			error = self.urlForErrorDictionary[urlKey];
+		}
+	}
+	return error;
+}
+
 @end
 
 #pragma mark -
@@ -28,7 +61,7 @@
 @implementation TFFURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-	return [[TFFURLStubManager sharedManager].stubbedURL isEqual:request.URL];
+	return [[TFFURLStubManager sharedManager] existingURLStringWithURL:request.URL] != nil;
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
@@ -40,7 +73,8 @@
 }
 
 - (void)startLoading {
-    [self.client URLProtocol:self didFailWithError:[TFFURLStubManager sharedManager].stubbedError];
+	NSError *error = [[TFFURLStubManager sharedManager] errorWithURL:self.request.URL];
+	[self.client URLProtocol:self didFailWithError:error];
 }
 
 - (void)stopLoading {
@@ -57,13 +91,13 @@
 @implementation TFFChaosMonkey
 
 - (void)stubURL:(NSURL *)url returningError:(NSError *)error {
-	[TFFURLStubManager sharedManager].stubbedURL = url;
-	[TFFURLStubManager sharedManager].stubbedError = error;
+    [[TFFURLStubManager sharedManager] addStubbedURL:url withError:error];
 }
 
 - (instancetype)initWithRandomNumberProvider:(TFFRandomNumberProvider *)randomNumberProvider {
 	self = [super init];
     [NSURLProtocol registerClass:TFFURLProtocol.class];
+    [[TFFURLStubManager sharedManager] reset];
 	_randomNumberProvider = randomNumberProvider;
 	return self;
 }
