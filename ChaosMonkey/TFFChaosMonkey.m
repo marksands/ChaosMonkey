@@ -39,7 +39,7 @@
 - (BOOL)canInitializeRequest:(NSURL *)url {
     BOOL canInitializeRequest = NO;
     if ([self errorWithURL:url]) {
-        canInitializeRequest = self.randomNumberProvider.nextRandom > 0.5;
+        canInitializeRequest = self.randomNumberProvider.nextRandom > 0.7; // This value is not unit tested and is based on feel
     }
     return canInitializeRequest;
 }
