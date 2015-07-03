@@ -46,37 +46,37 @@
 
 - (NSError *)errorWithURL:(NSURL *)url {
 	NSError *error = nil;
-	for (NSString *urlKey in self.urlForErrorDictionary) {
-		if ([self stubbedURLKey:urlKey matchesURLOrSingleStubbedHost:url]) {
-			error = self.urlForErrorDictionary[urlKey];
+	for (NSString *urlString in self.urlForErrorDictionary) {
+		if ([self stubbedURLString:urlString matchesURLOrSingleStubbedHost:url]) {
+			error = self.urlForErrorDictionary[urlString];
+            break;
 		}
 	}
 	return error;
 }
 
-- (BOOL)stubbedURLKey:(NSString *)urlKey matchesURLOrSingleStubbedHost:(NSURL *)url {
-    BOOL urlKeyMatchesSingleHostInStubbedResponses = NO;
-    
-    if (urlKey.pathComponents.count == 2 && [urlKey.pathComponents.firstObject rangeOfString:@"http"].location != NSNotFound) {
-        for (NSString *key in self.urlForErrorDictionary) {
-            BOOL keyMatchesHost = [[key pathComponents] containsObject:url.host] || [[key pathComponents] containsObject:[NSString stringWithFormat:@"%@:%@",url.host,url.port]];
-            if (urlKeyMatchesSingleHostInStubbedResponses && keyMatchesHost) {
-                urlKeyMatchesSingleHostInStubbedResponses = NO;
-                break;
-            } else if (keyMatchesHost) {
-                urlKeyMatchesSingleHostInStubbedResponses = YES;
-            }
-        }
-    }
+- (BOOL)stubbedURLString:(NSString *)urlKey matchesURLOrSingleStubbedHost:(NSURL *)url {
+    return [urlKey isEqualToString:url.absoluteString] || [self stubbedURLString:urlKey matchesComponentsForURL:url];;
+}
 
-    return [urlKey isEqualToString:url.absoluteString] || urlKeyMatchesSingleHostInStubbedResponses;
+- (BOOL)stubbedURLString:(NSString *)urlString matchesComponentsForURL:(NSURL *)URL {
+    NSURLComponents *stubbedURLComponents = [NSURLComponents componentsWithString:urlString];
+    NSURLComponents *potentiallyMatchingURLComponents = [NSURLComponents componentsWithURL:URL resolvingAgainstBaseURL:NO];
+
+	BOOL matchesScheme = stubbedURLComponents.scheme && potentiallyMatchingURLComponents.scheme ? [stubbedURLComponents.scheme isEqualToString:potentiallyMatchingURLComponents.scheme] : YES;
+	BOOL matchesHost = stubbedURLComponents.host && potentiallyMatchingURLComponents.host ? [stubbedURLComponents.host isEqualToString:potentiallyMatchingURLComponents.host] : YES;
+	BOOL matchesPort = stubbedURLComponents.port && potentiallyMatchingURLComponents.port ? [stubbedURLComponents.port isEqualToNumber:potentiallyMatchingURLComponents.port] : YES;
+	BOOL matchesPath = stubbedURLComponents.path.length && ![stubbedURLComponents.path isEqualToString:@"/"] && potentiallyMatchingURLComponents.path.length ? [stubbedURLComponents.path isEqualToString:potentiallyMatchingURLComponents.path] : YES;
+	BOOL matchesQueryString = stubbedURLComponents.query && potentiallyMatchingURLComponents.query ? [stubbedURLComponents.query isEqualToString:potentiallyMatchingURLComponents.query] : YES;
+
+	return matchesScheme && matchesHost && matchesPort && matchesPath && matchesQueryString;
 }
 
 @end
 
 #pragma mark -
 
-@interface TFFURLProtocol : NSURLProtocol <NSURLConnectionDelegate>
+@interface TFFURLProtocol : NSURLProtocol
 @end
 
 @implementation TFFURLProtocol

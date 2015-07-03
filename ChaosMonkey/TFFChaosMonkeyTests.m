@@ -14,10 +14,12 @@
 - (void)testWhenStubbingErrorResponseForAURLAndARequestIsMadeForThatURLAndRandomNumberProviderReturnsTrueThenStubbedErrorResponseIsReturned {
 	NSError *error = [NSError errorWithDomain:@"domain" code:3 userInfo:nil];
 	NSURL *url = [NSURL URLWithString:@"https://api.example.com/endpoint?withQueryString=1"];
-	[self stubURL:url returningError:error randomNumbers:@[@1]];
+    NSURL *urlWithDifferingQueryString = [NSURL URLWithString:@"https://api.example.com/endpoint?withQueryString=1&queryString=2"];
+    NSURL *urlWithDifferingEndpoint = [NSURL URLWithString:@"https://api.example.com/endpoint2?withQueryString=2"];
+    [self stubURL:url returningError:error randomNumbers:@[@1, @1, @1]];
 
 	[self verifyError:error	fromURL:url];
-	NSURL *urlWithDifferingEndpoint = [NSURL URLWithString:@"https://api.example.com/endpoint2?withQueryString=2"];
+    [self verifyNoError:error fromURL:urlWithDifferingQueryString];
 	[self verifyNoError:error fromURL:urlWithDifferingEndpoint];
 }
 
@@ -26,7 +28,7 @@
 	NSError *error2 = [NSError errorWithDomain:@"domain2" code:444 userInfo:nil];
 	NSURL *url1 = [NSURL URLWithString:@"https://api.example.com/endpoint1"];
 	NSURL *url2 = [NSURL URLWithString:@"https://api.example.com/endpoint2"];
-	testObject = [self stubURL:url1 returningError:error1 randomNumbers:@[@1, @1]];
+	testObject = [self stubURL:url1 returningError:error1 randomNumbers:@[@1, @1, @1, @1, @1]];
 	[testObject stubURL:url2 returningError:error2];
 
     [self verifyError:error1 fromURL:url1];
@@ -73,9 +75,27 @@
 	[self verifyError:error fromURL:url1];
 	[self verifyError:error fromURL:url2];
 	[self verifyError:error fromURL:url3];
-	[self verifyError:error fromURL:url4];
-	[self verifyError:error fromURL:url5];
+	[self verifyError:error2 fromURL:url4];
+	[self verifyError:error2 fromURL:url5];
+}
 
+- (void)testWhenStubbingErrorResponseForURLAndARequestIsMadeForURLWithAnAdditionalQueryStringAndRandomNumberProviderReturnsTrueThenResponseIsStubbed {
+	NSError *error = [NSError errorWithDomain:@"hostdomain" code:777 userInfo:nil];
+	NSURL *host = [NSURL URLWithString:@"https://api.example.com:9000/specific/endpiont"];
+	[self stubURL:host returningError:error randomNumbers:@[@1]];
+
+	NSURL *url1 = [NSURL URLWithString:@"https://api.example.com:9000/specific/endpiont?withQueryString=true"];
+	[self verifyError:error fromURL:url1];
+}
+
+- (void)testWhenStubbingErrorResponseForURLWithEndpointAndRequestIsMadeForHostThenResponseNotStubbed {
+    NSError *error = [NSError errorWithDomain:@"errorDomain" code:123 userInfo:nil];
+    NSURL *host = [NSURL URLWithString:@"https://api.example.com:4567/1234/path"];
+    [self stubURL:host returningError:error randomNumbers:@[@1]];
+    
+    // Could https://api.example.com:4567 ever happen?
+    NSURL *url1 = [NSURL URLWithString:@"https://api.example.com:4567/"];
+    [self verifyNoError:error fromURL:url1];
 }
 
 - (TFFChaosMonkey *)stubURL:(NSURL *)url returningError:(NSError *)error randomNumbers:(NSArray *)randomNumbers {
