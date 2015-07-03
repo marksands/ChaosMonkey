@@ -6,8 +6,8 @@
 @property (nonatomic) TFFRandomNumberProvider *randomNumberProvider;
 
 - (void)addStubbedURL:(NSURL *)url withError:(NSError *)error;
-
 - (void)resetRandomNumberProvider:(TFFRandomNumberProvider *)provider;
+
 @end
 
 @implementation TFFURLStubManager
@@ -22,37 +22,37 @@
 }
 
 - (instancetype)init {
-	self = [super init];
-	_urlForErrorDictionary = [NSMutableDictionary dictionary];
-	return self;
+    self = [super init];
+    _urlForErrorDictionary = [NSMutableDictionary dictionary];
+    return self;
 }
 
 - (void)resetRandomNumberProvider:(TFFRandomNumberProvider *)randomNumberProvider {
-	self.randomNumberProvider = randomNumberProvider;
+    self.randomNumberProvider = randomNumberProvider;
     [self.urlForErrorDictionary removeAllObjects];
 }
 
 - (void)addStubbedURL:(NSURL *)url withError:(NSError *)error {
-	self.urlForErrorDictionary[url.absoluteString] = error;
+    self.urlForErrorDictionary[url.absoluteString] = error;
 }
 
 - (BOOL)canInitializeRequest:(NSURL *)url {
-	BOOL canInitializeRequest = NO;
-	if ([self errorWithURL:url]) {
-		canInitializeRequest = self.randomNumberProvider.nextRandom > 0.5;
-	}
-	return canInitializeRequest;
+    BOOL canInitializeRequest = NO;
+    if ([self errorWithURL:url]) {
+        canInitializeRequest = self.randomNumberProvider.nextRandom > 0.5;
+    }
+    return canInitializeRequest;
 }
 
 - (NSError *)errorWithURL:(NSURL *)url {
-	NSError *error = nil;
-	for (NSString *urlString in self.urlForErrorDictionary) {
-		if ([self stubbedURLString:urlString matchesURLOrSingleStubbedHost:url]) {
-			error = self.urlForErrorDictionary[urlString];
+    NSError *error = nil;
+    for (NSString *urlString in self.urlForErrorDictionary) {
+        if ([self stubbedURLString:urlString matchesURLOrSingleStubbedHost:url]) {
+            error = self.urlForErrorDictionary[urlString];
             break;
-		}
-	}
-	return error;
+        }
+    }
+    return error;
 }
 
 - (BOOL)stubbedURLString:(NSString *)urlKey matchesURLOrSingleStubbedHost:(NSURL *)url {
@@ -63,13 +63,13 @@
     NSURLComponents *stubbedURLComponents = [NSURLComponents componentsWithString:urlString];
     NSURLComponents *potentiallyMatchingURLComponents = [NSURLComponents componentsWithURL:URL resolvingAgainstBaseURL:NO];
 
-	BOOL matchesScheme = stubbedURLComponents.scheme && potentiallyMatchingURLComponents.scheme ? [stubbedURLComponents.scheme isEqualToString:potentiallyMatchingURLComponents.scheme] : YES;
-	BOOL matchesHost = stubbedURLComponents.host && potentiallyMatchingURLComponents.host ? [stubbedURLComponents.host isEqualToString:potentiallyMatchingURLComponents.host] : YES;
-	BOOL matchesPort = stubbedURLComponents.port && potentiallyMatchingURLComponents.port ? [stubbedURLComponents.port isEqualToNumber:potentiallyMatchingURLComponents.port] : YES;
-	BOOL matchesPath = stubbedURLComponents.path.length && ![stubbedURLComponents.path isEqualToString:@"/"] && potentiallyMatchingURLComponents.path.length ? [stubbedURLComponents.path isEqualToString:potentiallyMatchingURLComponents.path] : YES;
-	BOOL matchesQueryString = stubbedURLComponents.query && potentiallyMatchingURLComponents.query ? [stubbedURLComponents.query isEqualToString:potentiallyMatchingURLComponents.query] : YES;
+    BOOL matchesScheme = stubbedURLComponents.scheme && potentiallyMatchingURLComponents.scheme ? [stubbedURLComponents.scheme isEqualToString:potentiallyMatchingURLComponents.scheme] : YES;
+    BOOL matchesHost = stubbedURLComponents.host && potentiallyMatchingURLComponents.host ? [stubbedURLComponents.host isEqualToString:potentiallyMatchingURLComponents.host] : YES;
+    BOOL matchesPort = stubbedURLComponents.port && potentiallyMatchingURLComponents.port ? [stubbedURLComponents.port isEqualToNumber:potentiallyMatchingURLComponents.port] : YES;
+    BOOL matchesPath = stubbedURLComponents.path.length && ![stubbedURLComponents.path isEqualToString:@"/"] && potentiallyMatchingURLComponents.path.length ? [stubbedURLComponents.path isEqualToString:potentiallyMatchingURLComponents.path] : YES;
+    BOOL matchesQueryString = stubbedURLComponents.query && potentiallyMatchingURLComponents.query ? [stubbedURLComponents.query isEqualToString:potentiallyMatchingURLComponents.query] : YES;
 
-	return matchesScheme && matchesHost && matchesPort && matchesPath && matchesQueryString;
+    return matchesScheme && matchesHost && matchesPort && matchesPath && matchesQueryString;
 }
 
 @end
@@ -82,20 +82,20 @@
 @implementation TFFURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-	return [[TFFURLStubManager sharedManager] canInitializeRequest:request.URL];
+    return [[TFFURLStubManager sharedManager] canInitializeRequest:request.URL];
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
-	return request;
+    return request;
 }
 
 + (BOOL)requestIsCacheEquivalent:(NSURLRequest *)requestOne toRequest:(NSURLRequest *)requestTwo {
-	return NO;
+    return NO;
 }
 
 - (void)startLoading {
-	NSError *error = [[TFFURLStubManager sharedManager] errorWithURL:self.request.URL];
-	[self.client URLProtocol:self didFailWithError:error];
+    NSError *error = [[TFFURLStubManager sharedManager] errorWithURL:self.request.URL];
+    [self.client URLProtocol:self didFailWithError:error];
 }
 
 - (void)stopLoading {
@@ -112,11 +112,11 @@
 }
 
 - (instancetype)initWithRandomNumberProvider:(TFFRandomNumberProvider *)randomNumberProvider {
-	self = [super init];
+    self = [super init];
     [NSURLProtocol unregisterClass:TFFURLProtocol.class];
     [NSURLProtocol registerClass:TFFURLProtocol.class];
     [[TFFURLStubManager sharedManager] resetRandomNumberProvider:randomNumberProvider];
-	return self;
+    return self;
 }
 
 @end

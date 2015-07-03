@@ -16,9 +16,9 @@
 }
 
 - (double)nextRandom {
-	double random = [self.randomNumbers[self.nextRandomIndex] doubleValue];
-	self.nextRandomIndex = self.nextRandomIndex + 1 < self.randomNumbers.count ? self.nextRandomIndex + 1 : 0;
-	return random;
+    double random = [self.randomNumbers[self.nextRandomIndex] doubleValue];
+    self.nextRandomIndex = self.nextRandomIndex + 1 < self.randomNumbers.count ? self.nextRandomIndex + 1 : 0;
+    return random;
 }
 
 @end
