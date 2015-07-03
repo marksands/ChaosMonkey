@@ -63,11 +63,11 @@
     NSURLComponents *stubbedURLComponents = [NSURLComponents componentsWithString:urlString];
     NSURLComponents *potentiallyMatchingURLComponents = [NSURLComponents componentsWithURL:URL resolvingAgainstBaseURL:NO];
 
-    BOOL matchesScheme = stubbedURLComponents.scheme && potentiallyMatchingURLComponents.scheme ? [stubbedURLComponents.scheme isEqualToString:potentiallyMatchingURLComponents.scheme] : YES;
-    BOOL matchesHost = stubbedURLComponents.host && potentiallyMatchingURLComponents.host ? [stubbedURLComponents.host isEqualToString:potentiallyMatchingURLComponents.host] : YES;
-    BOOL matchesPort = stubbedURLComponents.port && potentiallyMatchingURLComponents.port ? [stubbedURLComponents.port isEqualToNumber:potentiallyMatchingURLComponents.port] : YES;
-    BOOL matchesPath = stubbedURLComponents.path.length && ![stubbedURLComponents.path isEqualToString:@"/"] && potentiallyMatchingURLComponents.path.length ? [stubbedURLComponents.path isEqualToString:potentiallyMatchingURLComponents.path] : YES;
-    BOOL matchesQueryString = stubbedURLComponents.query && potentiallyMatchingURLComponents.query ? [stubbedURLComponents.query isEqualToString:potentiallyMatchingURLComponents.query] : YES;
+    BOOL matchesScheme = !(stubbedURLComponents.scheme && potentiallyMatchingURLComponents.scheme) || [stubbedURLComponents.scheme isEqualToString:potentiallyMatchingURLComponents.scheme];
+    BOOL matchesHost = !(stubbedURLComponents.host && potentiallyMatchingURLComponents.host) || [stubbedURLComponents.host isEqualToString:potentiallyMatchingURLComponents.host];
+    BOOL matchesPort = !(stubbedURLComponents.port && potentiallyMatchingURLComponents.port) || [stubbedURLComponents.port isEqualToNumber:potentiallyMatchingURLComponents.port];
+    BOOL matchesPath = !(stubbedURLComponents.path.length && ![stubbedURLComponents.path isEqualToString:@"/"] && potentiallyMatchingURLComponents.path.length) || [stubbedURLComponents.path isEqualToString:potentiallyMatchingURLComponents.path];
+    BOOL matchesQueryString = !(stubbedURLComponents.query && potentiallyMatchingURLComponents.query) || [stubbedURLComponents.query isEqualToString:potentiallyMatchingURLComponents.query];
 
     return matchesScheme && matchesHost && matchesPort && matchesPath && matchesQueryString;
 }
